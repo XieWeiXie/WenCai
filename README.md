@@ -1,2 +1,6 @@
 # WenCai
-crawl from iwencai
+
+**关键字：取联想词**
+
+- 频道： 问财
+
