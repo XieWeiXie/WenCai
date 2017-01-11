@@ -107,27 +107,28 @@ class WenCaiCrawler(object):
         doc = recommened_doc.xpath('//li//a/text()')
         return doc
 
-    def push_to_db(self):
-        pass
-
-    def main(self):
+    def keyword_content(self):
         keywords = []
         new, classic = self.question_parse()
         keywords.extend(new)
         keywords.extend(classic)
         keywords.extend(self.keywords)
-        for item in keywords[30:]:
-            for i in range(len(item)):
-                d = item[0:i+1]
-                association_info = {"kw":d, "asscociation":{}}
+        return keywords
+
+    def main(self, item):
+        for i in range(len(item)):
+            d = item[0:i+1]
+            if d.isalpha():
+                association_info = {"kw": str(d), "asscociation": {}}
                 collection_item = self.association_query(d)
                 for m in collection_item:
-                    association_info["asscociation"][m] = []
+                    association_info["asscociation"] = []
+                    # association_info["asscociation"][m] = []
                 if collection_item:
                     for one in collection_item:
                         recommend_item = self.recommend_query(one)
                         if recommend_item:
-                            association_info["asscociation"][one]= recommend_item
+                            association_info["asscociation"].append({"k":one,"recommend": recommend_item})#[one] = recommend_item
                             # print association_info
                             print d, one
                 if not association_info["asscociation"]:
@@ -137,9 +138,16 @@ class WenCaiCrawler(object):
                 except pymongo.errors.DuplicateKeyError:
                     pass
 
-if __name__=="__main__":
+if __name__== "__main__":
+    from multiprocessing.dummy import Pool
     A = WenCaiCrawler()
-    A.main()
+    thread_num = 4
+    keys = A.keyword_content()
+    pool = Pool(thread_num)
+    pool.map(A.main, keys)
+    pool.close()
+    pool.join()
+    # A.main()
     # keywords = "股价低位且主力建仓"
     # B = A.recommend_query(keywords)
     # for one in B:
