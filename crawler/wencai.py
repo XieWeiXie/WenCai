@@ -126,7 +126,7 @@ class WenCaiCrawler(object):
                     for one in collection_item:
                         recommend_item = self.recommend_query(one)
                         if recommend_item:
-                            association_info["asscociation"].append({"k":one,"recommend": recommend_item})#[one] = recommend_item
+                            association_info["asscociation"].append({"k": one, "recommend": recommend_item})#[one] = recommend_item
                             print d, one
                 if not association_info["asscociation"]:
                     continue
