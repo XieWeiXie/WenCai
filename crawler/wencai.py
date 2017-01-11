@@ -6,7 +6,6 @@
 @software: PyCharm
 @time: 2017/1/10 10:52
 """
-from pprint import pprint
 import pymongo.errors
 import requests
 import logging
@@ -39,7 +38,7 @@ class WenCaiCrawler(object):
             "qid":None,
             "q": None
         }
-        self.keywords= keys
+        self.keywords = keys
         self.collection = MongoClient("192.168.100.20", 27017)["ada"]["wencai"]
         self.cookies = {
             'PHPSESSID': '6ae9hlk3ipf4fg3vpjh0t1tu12',
@@ -123,13 +122,11 @@ class WenCaiCrawler(object):
                 collection_item = self.association_query(d)
                 for m in collection_item:
                     association_info["asscociation"] = []
-                    # association_info["asscociation"][m] = []
                 if collection_item:
                     for one in collection_item:
                         recommend_item = self.recommend_query(one)
                         if recommend_item:
                             association_info["asscociation"].append({"k":one,"recommend": recommend_item})#[one] = recommend_item
-                            # print association_info
                             print d, one
                 if not association_info["asscociation"]:
                     continue
@@ -138,7 +135,7 @@ class WenCaiCrawler(object):
                 except pymongo.errors.DuplicateKeyError:
                     pass
 
-if __name__== "__main__":
+if __name__ == "__main__":
     from multiprocessing.dummy import Pool
     A = WenCaiCrawler()
     thread_num = 4
