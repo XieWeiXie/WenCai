@@ -8,7 +8,6 @@
 """
 import pymongo.errors
 import requests
-import logging
 from random import choice
 from docs.config import USER_AGENT
 from lxml import etree
@@ -17,6 +16,7 @@ from pymongo import MongoClient
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
 
 class MyLogger(object):
     def __init__(self):
@@ -130,6 +130,7 @@ class WenCaiCrawler(object):
                             print d, one
                 if not association_info["asscociation"]:
                     continue
+                # last_data = self.collection.find({""})
                 try:
                     self.collection.insert_one(association_info)
                 except pymongo.errors.DuplicateKeyError:
